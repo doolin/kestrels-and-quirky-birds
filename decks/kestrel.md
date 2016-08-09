@@ -1,11 +1,5 @@
 # Ruby's `tap` as a kestrel
 
----
-title: Carving Ruby arrays
-date: 2015-10-24 06:38 PDT
-tags: ruby, deep-dive, array, carve
----
-
 I ran across an interesting method in a colleague's commit
 recently, which monkey patched Ruby's `Array` class. To me, it nearly
 epitomizes Ruby's elegance by packing a number of powerful
@@ -13,6 +7,8 @@ techniques into a single short line of code, without being unreadably
 complicated. No line noise here. While I'm not sold one way or the other
 on monkey patching, I was intrigued enough by the following `carve!`
 method to dig a bit deeper.
+
+# Cheap counterfeit
 
 *Note: this replicates functionality provided by `Enumerable.partition`,
 so there's probably no reason to use this in production.* On the other
@@ -22,9 +18,10 @@ counterfeit](https://practicingruby.com/articles/domain-specific-apis)
 is usually enlightening.
 
 
-Here's the snippet under consideration:
+# Here's the snippet under consideration:
 
-~~~ruby
+~~~
+@@@ ruby
 class Array
   def carve!
     dup.tap { delete_if &Proc.new } - self
@@ -35,7 +32,7 @@ end
 It does exactly what the name `carve!` implies, separating one Array
 into two Arrays based on the condition passed in as a block.
 
-How it works:
+# How it works:
 
 * `dup` makes a copy of the values in the array and returns those values
 in a new array. That's pretty straightforward.
@@ -58,14 +55,15 @@ The slightly mind-bending aspect of `carve!` is how it processes the
 block passed in as the condition. It was not at all obvious to me, so
 let's take a deeper look at that.
 
-## dup and tap
+# dup and tap
 
 The `dup.tap` calls warrant a closer look. Especially `tap` which to me is one
 of those super simple constructions which I don't use very often, hence
 haven't developed an intuitive feel for it. Using `tap` saves two lines of
 code for the same functionality:
 
-~~~ruby
+~~~
+@@@ruby
 def carve2!
   other = dup
   delete_if &Proc.new
@@ -76,7 +74,7 @@ end
 A case could be made for `carve2` being easier to understand. A (strong) case
 could also be made for mastering Ruby, `tap` and all. I choose mastery.
 
-### More about #tap
+# More about #tap
 
 Ruby 1.9 introduced the `tap` method, which passes `self` to a block and
 returns `self` after processing the block. Normally, the result of the
@@ -96,14 +94,15 @@ But that takes us too far afield for today.
 The important thing when using `tap` is understanding that the block has
 no implicit return, it is only used as a generator of side effects.
 
-## delete_if and passing procs
+# delete_if and passing procs
 
 Let's take a closer look at `delete_if`. This is one of those
 Ruby methods which "just works" usually without having to think much about it.
 For our investigation, we need to get drill a bit deeper. We'll start
 with some REPL code:
 
-~~~ruby
+~~~
+@@@ruby
 $ irb
 2.2.3 :001 > [1, 2].delete_if { |e| e < 2 }
  => [2] # as expected
@@ -128,7 +127,7 @@ argument prefixed with an ampersand `&`. In which case, that argument is receive
 as Proc object.
 
 
-## &Proc.new
+# &Proc.new
 
 In Ruby, `Proc` is an object created from a block.
 
@@ -145,9 +144,11 @@ attached block, in which case that block is converted to the <code>Proc</code> o
 What I need to do here is create my own method which yields, and see how
 `&Proc` works with that. Using `map` and `delete_if` doesn't give me enough
 insight into how `&Proc` *really* works. The `dup.tap` gets in the way.
-How about a custom map method:
 
-~~~ruby
+# How about a custom map method:
+
+~~~
+@@@ruby
 class Array
   def newmap
     map &Proc.new
@@ -160,7 +161,7 @@ puts nm # 2, 3
 
 And that's the long and short of `carve!`.
 
-## Carving arrays
+# Carving arrays
 
 Without making any judgement call on monkey patching, `carve!` feels like an
 elegant addition to Ruby's `Array` class. The implementation given here is not
