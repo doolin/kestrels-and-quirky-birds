@@ -1,21 +1,12 @@
 # Ruby's `tap` as a kestrel
 
+
+# Carving an array with K Combinator
+
+
 I ran across an interesting method in a colleague's commit
-recently, which monkey patched Ruby's `Array` class. To me, it nearly
-epitomizes Ruby's elegance by packing a number of powerful
-techniques into a single short line of code, without being unreadably
-complicated. No line noise here. While I'm not sold one way or the other
-on monkey patching, I was intrigued enough by the following `carve!`
-method to dig a bit deeper.
-
-# Cheap counterfeit
-
-*Note: this replicates functionality provided by `Enumerable.partition`,
-so there's probably no reason to use this in production.* On the other
-hand, as noted by Benjamin Tan in [The Ruby Closures
-Book](https://leanpub.com/therubyclosuresbook/read), implementing a [cheap
-counterfeit](https://practicingruby.com/articles/domain-specific-apis)
-is usually enlightening.
+recently, which monkey patched Ruby's `Array` class with a method
+called `carve!`.
 
 
 # Here's the snippet under consideration:
@@ -31,6 +22,35 @@ end
 
 It does exactly what the name `carve!` implies, separating one Array
 into two Arrays based on the condition passed in as a block.
+
+### Enumerate.partition returns 2 new Arrays
+
+
+## Array.carve!
+
+### A personal opinion
+
+* epitomizes Ruby's elegance by packing a number of powerful
+techniques into a single short line of code,
+* without being unreadably
+complicated.
+* No line noise here.
+
+While I'm not sold one way or the other
+on monkey patching, I was intrigued enough by the following `carve!`
+method to dig a bit deeper.
+
+# Cheap counterfeit
+
+*Note: `carve!` almost replicates `Enumerable.partition`,
+so there's probably no reason to use it in production.*
+
+On the other
+hand, as noted by Benjamin Tan in [The Ruby Closures
+Book](https://leanpub.com/therubyclosuresbook/read), implementing a [cheap
+counterfeit](https://practicingruby.com/articles/domain-specific-apis)
+is usually enlightening.
+
 
 # How it works:
 
@@ -81,9 +101,7 @@ returns `self` after processing the block. Normally, the result of the
 block would be returned. In combinatory logic, this behavior is defined
 by a function called *kestrel*, or $$K$$ Combinator:
 
-$$
-kxy = x.
-$$
+Kxy = (Kx)y = x.
 
 The theoretical importance of $$K$$ cannot be overstated. Combined with
 the $$S$$ combinator, the $$SK$$ calculus is equivalent to an untyped lambda
