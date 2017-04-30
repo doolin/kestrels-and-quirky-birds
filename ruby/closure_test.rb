@@ -1,4 +1,5 @@
 #!/usr/bin/env ruby
+# frozen_string_literal: true
 
 x = 5
 
@@ -10,13 +11,12 @@ end
 
 m { |x| puts x }
 
-
 def lambda_check
   x = -> { return }
-  x.()
+  x.call
   puts 'returned from lambda'
-  y = Proc.new { return }
-  y.()
+  y = proc { return }
+  y.call
   puts 'returned from proc'
 end
 

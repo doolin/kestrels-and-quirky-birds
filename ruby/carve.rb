@@ -1,4 +1,5 @@
 #!/usr/bin/env ruby
+# frozen_string_literal: true
 
 require 'rspec'
 
@@ -9,13 +10,12 @@ class Array
   end
 end
 
-
-carve = <<EOS
-class Array
-  def carve!
-    dup.tap { delete_if &Proc.new } - self
+carve = <<~EOS
+  class Array
+    def carve!
+      dup.tap { delete_if &Proc.new } - self
+    end
   end
-end
 EOS
 
 puts RubyVM::InstructionSequence.compile(carve).disasm if false
@@ -26,7 +26,7 @@ class Array
     # tap appears necessary here, justify its necessity and explain
     # how it works.
     # dup.tap { delete_if &Proc.new } - self
-    dup.tap { self.delete_if &Proc.new } - self
+    dup.tap { delete_if &Proc.new } - self
   end
 
   def carve2!
@@ -52,9 +52,9 @@ class Array
   end
 
   # private
-   def test_for_spec
-     'called'
-   end
+  def test_for_spec
+    'called'
+  end
 end
 
 # Interesting note on testing private methods:
@@ -105,7 +105,6 @@ end
 #  This is also a useful place to stick in a reminder about the SRP; it applies
 #  to classes and larger assemblies, not simply to methods.
 
-
 RSpec.describe Array do
   it 'captures call to private method with expectation' do
     array = [3]
@@ -114,26 +113,26 @@ RSpec.describe Array do
   end
 end
 
-puts "carve"
+puts 'carve'
 a = [1, 2, 3, 4, 5]
 b = a.carve! { |e| e < 3 }
-print "a: ", a, "\n"
-print "b: ", b, "\n"
+print 'a: ', a, "\n"
+print 'b: ', b, "\n"
 
-puts "carve2"
+puts 'carve2'
 c = [1, 2, 3, 4, 5]
 d = c.carve2! { |e| e < 3 }
-print "c: ", c, "\n"
-print "d: ", d, "\n"
+print 'c: ', c, "\n"
+print 'd: ', d, "\n"
 
-puts "carve3"
+puts 'carve3'
 e = [1, 2, 3, 4, 5]
 f = c.carve3! { |element| element < 3 }
-print "e: ", e, "\n"
-print "f: ", f, "\n"
+print 'e: ', e, "\n"
+print 'f: ', f, "\n"
 
-puts "reject example"
-puts [6,7,8].d_reject! { |e| e > 7 }
+puts 'reject example'
+puts [6, 7, 8].d_reject! { |e| e > 7 }
 
 class Array
   def newmap
@@ -141,7 +140,7 @@ class Array
   end
 end
 
-puts "newmap example"
+puts 'newmap example'
 nm = [1, 2].newmap { |element| element + 1 }
 puts nm
 
@@ -154,5 +153,5 @@ def block_binder(&block)
   yield
 end
 
-puts "block.binding example"
-block_binder { puts "foo" }
+puts 'block.binding example'
+block_binder { puts 'foo' }

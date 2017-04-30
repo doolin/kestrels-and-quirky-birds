@@ -1,5 +1,5 @@
 #!/usr/bin/env ruby
-
+# frozen_string_literal: true
 
 # From https://github.com/raganwald-deprecated/homoiconic/blob/master/2008-10-29/kestrel.markdown#readme
 # Kxy = x
@@ -11,11 +11,9 @@
 # kestrel.call(x).call(y)
 #   => x # for *any* y.
 
-
-
 # kestrel = -> (y) { y.call }
 
-def inside value , &block
+def inside(value, &block)
   value.instance_eval(&block)
   value
 end
@@ -30,6 +28,6 @@ puts v
 x = -> { puts 42 }
 y = -> { puts 13 }
 
-kestrel = -> (x) { x }
+kestrel = ->(x) { x }
 
 puts kestrel.call(:foo)
