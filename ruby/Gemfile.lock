@@ -18,7 +18,7 @@ GEM
     erector (0.10.0)
       treetop (>= 1.2.3)
     eventmachine (1.2.5)
-    json (2.1.0)
+    json (2.3.1)
     mini_portile2 (2.3.0)
     nokogiri (1.8.1)
       mini_portile2 (~> 2.3.0)
