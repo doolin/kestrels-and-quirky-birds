@@ -13,8 +13,8 @@
 
 # kestrel = -> (y) { y.call }
 
-def inside(value, &block)
-  value.instance_eval(&block)
+def inside(value, &)
+  value.instance_eval(&)
   value
 end
 

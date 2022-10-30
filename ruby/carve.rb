@@ -6,7 +6,7 @@ require 'rspec'
 class Array
   def carve!
     # dup.tap { delete_if(&Proc.new) } - self
-    dup.tap { delete_if &Proc.new } - self
+    dup.tap { delete_if(&Proc.new) } - self
   end
 end
 
@@ -26,12 +26,12 @@ class Array
     # tap appears necessary here, justify its necessity and explain
     # how it works.
     # dup.tap { delete_if &Proc.new } - self
-    dup.tap { delete_if &Proc.new } - self
+    dup.tap { delete_if(&Proc.new) } - self
   end
 
   def carve2!
     other = dup
-    delete_if &Proc.new
+    delete_if(&Proc.new)
     # dd = other.delete_if &Proc.new
     # dd = other.tap { delete_if &Proc.new }
     # puts dd
@@ -40,11 +40,11 @@ class Array
   end
 
   def carve3!
-    (dup.delete_if &Proc.new) - self
+    dup.delete_if(&Proc.new) - self
   end
 
   def d_reject!
-    delete_if &Proc.new
+    delete_if(&Proc.new)
   end
 
   def call_test_for_spec
@@ -136,7 +136,7 @@ puts [6, 7, 8].d_reject! { |e| e > 7 }
 
 class Array
   def newmap
-    map &Proc.new
+    map(&Proc.new)
   end
 end
 
