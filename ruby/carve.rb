@@ -3,6 +3,8 @@
 
 require 'rspec'
 
+# Monkey patch
+# TODO: move to cabochons
 class Array
   def carve!
     # dup.tap { delete_if(&Proc.new) } - self
