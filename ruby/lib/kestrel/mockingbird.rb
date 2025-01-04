@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 # frozen_string_literal: true
 
-require 'rspec'
+require 'rspec/autorun'
 
 def mockingbird(x)
   x.call(x)
@@ -9,7 +9,7 @@ end
 # But really, this is the M combinator Mx = xx
 alias M mockingbird
 
-describe 'self' do
+RSpec.describe 'self' do
   xit 'blows up the stack with SystemStackError when without a halting condition' do
     y = ->(y) { mockingbird y }
     expect { mockingbird(y) }.to raise_error SystemStackError
