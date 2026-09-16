@@ -6,7 +6,7 @@ GEM
       bundler (>= 1.2.0)
       thor (~> 1.0)
     diff-lcs (1.5.1)
-    json (2.9.1)
+    json (2.21.2)
     language_server-protocol (3.17.0.3)
     parallel (1.26.3)
     parser (3.3.6.0)
